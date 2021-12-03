@@ -1,0 +1,15 @@
+matematika     6 0 1 10
+literatura      3 1 0 7
+russkii         4 1 1 8
+biologiya       2 2 0 5
+fizra           2 3 0 3
+fizika          4 4 1 9
+himiya          3 5 0 9
+obshestvo       2 6 0 4
+istoriya_rossii 1 6 0 7
+istoriya_mira   1 6 0 7
+astronomiya     1 4 0 5
+informatika     4 7 1 6
+english         3 17 0 6 
+IP              2 56 1 2
+economika       1 56 0 5

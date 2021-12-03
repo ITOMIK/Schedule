@@ -102,7 +102,6 @@ public:
     int grade;
     static const int max_lessons_day=6;
     static const int max_equal_lessons=2;
-    static const int max_count_dual=2;
     static const int days_at_week=6;
     int graph_of_complexity[days_at_week]={1, 3, 4, 2, 5, 0};
 
@@ -112,7 +111,7 @@ public:
         Day d;
         d.name=Days::Mon;
         for(int i=0;i<days_at_week;i++)
-        {
+        {       
             week.push_back(d);
             d.name=Days(int(d.name)+1);
         }
@@ -147,56 +146,71 @@ private:
     void gen_first(){
         queue<Lesson> lq;
         for(auto l:lessons) lq.push(l);
-        int day=0;
-        int step=0;
      
         fill(max_lessons_day, lq);
         fill(max_lessons_day+1,lq, false);
         
         parallel[0].second=sort_by_complexity(parallel[0].second);
     }
-
+    //заполняет неделю уроками
+    /*
+    _max_lessons_day - максимальное кол-во уроков в день
+    lq - очередь уроков, которые нужно разместить
+    first - флаг первого прохода
+    */
     void fill(int _max_lessons_day, queue<Lesson>& lq, bool first=true){
         int day=0;
         int step=0;
-        auto already_fill=[*this,max_lessons_day](){
+        auto already_fill=[*this,_max_lessons_day](){ 
             for(auto day:parallel[0].second)
-                if(day.lessons.size()<max_lessons_day)
+                if(day.lessons.size()<_max_lessons_day)
                     return false;
             return true;
-        };
-        cout<<lq.size()<<endl;
-        while((!lq.empty() && first && !already_fill()) ||
+        };//лямбда-функция, проверяет что день уже заполнен
+        //cout<<lq.size()<<endl;
+        while((!lq.empty() && (first && !already_fill())) ||
                 (!lq.empty() && !first)){
             step++;
             if(step>1000)
                 assert(false);//"Ne udalos sgenerit raspisanie dlya A classa")
-            
-            if(parallel[0].second[day].lessons.size()>=_max_lessons_day)//если уроков уже полно в этот день
+
+            if(isNeedSwitch(parallel[0].second[day], lq, _max_lessons_day))
             {
+                //todo: выводить день и содержимое очереди для отладки, чтобы найти из-за чего зависаем
                 day=(day+1)%parallel[0].second.size();//переключаем день
                 continue;
             }
-
-            while(lq.front().count>0)
+          
+            auto t=lq.front();
+            while(t.count>0)
             {
-                //todo: next raz условие настроить
-                if(lq.front().is_dual)
-                    if(!(parallel[0].second[day].lesson_count(lq.front())<max_equal_lessons 
-                        && parallel[0].second[day].count_dual()<max_count_dual))
-                        break;
-
-                parallel[0].second[day].lessons.push_back(lq.front());
-                lq.front().count--;
-                if(!lq.front().is_dual) break;
+                if(parallel[0].second[day].lesson_count(t)>=(t.is_dual?max_equal_lessons:1))//если уроков больше, чем можно в день
+                    break;
+                
+                parallel[0].second[day].lessons.push_back(t);
+                t.count--;
+                if(!t.is_dual) break;
             }
             
-            auto t=lq.front();
+            
             lq.pop();//удаляем урок из очереди
             if(t.count!=0) lq.push(t); //добавляем остаток в конец очереди
         }
     }
     
+    bool isNeedSwitch(Day day, queue<Lesson> lq, int _max_lessons_day){
+        if(day.lessons.size()>=_max_lessons_day)//если уроков уже полно в этот день
+            return true;
+        while(!lq.empty()) 
+        {
+            auto l=lq.front();
+            lq.pop();
+            if(day.lesson_count(l)<(l.is_dual?max_equal_lessons:1))//если урок лезет
+                return false;
+        }
+        return true;
+    }
+
     vector<Day> sort_by_complexity(vector<Day> days){
         sort(days.begin(),
             days.end(),
