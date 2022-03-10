@@ -1,6 +1,16 @@
 {
     "files.associations": {
         "queue": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "iostream": "cpp",
+        "algorithm": "cpp",
+        "vector": "cpp",
+        "cassert": "cpp",
+        "deque": "cpp",
+        "initializer_list": "cpp",
+        "xstring": "cpp",
+        "xtree": "cpp",
+        "xutility": "cpp",
+        "map": "cpp"
     }
 }
