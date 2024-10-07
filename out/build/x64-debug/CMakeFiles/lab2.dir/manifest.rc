@@ -1,0 +1,2 @@
+#pragma code_page(65001)
+1 /* CREATEPROCESS_MANIFEST_RESOURCE_ID */ 24 /* RT_MANIFEST */ "D:/suai-labs/lab2-4415/lab2/out/build/x64-debug/CMakeFiles/lab2.dir/embed.manifest"

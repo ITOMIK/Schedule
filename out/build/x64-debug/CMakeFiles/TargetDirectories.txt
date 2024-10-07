@@ -1,0 +1,3 @@
+D:/suai-labs/lab2-4415/lab2/out/build/x64-debug/CMakeFiles/lab2.dir
+D:/suai-labs/lab2-4415/lab2/out/build/x64-debug/CMakeFiles/edit_cache.dir
+D:/suai-labs/lab2-4415/lab2/out/build/x64-debug/CMakeFiles/rebuild_cache.dir
